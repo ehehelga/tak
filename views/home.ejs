@@ -1,0 +1,46 @@
+<div class="m-4 container">
+    <div class="col-6">
+        <ul class="list-group">
+            <% for (let file of List) {%>
+            <li class="list-group-item">
+                <% if (file.type == "file") {%> <%= file.name %> <% } else {%>
+                <a href="/show/<%= FilePath.slice(8) + file.name %>"><%= file.name %></a> <% }%>
+                <div class="btn-group float-end" role="group">
+                  <% if ((file.type == "file")) { %>
+                    <button
+                        type="button"
+                        class="btn btn-secondary btn-sm"
+                        onclick="location.href='/download/<%= FilePath + '/' + file.name %>'"
+                    >
+                        Скачать
+                    </button>
+                    <% } %>
+                    <button
+                        type="button"
+                        class="btn btn-dark btn-sm"
+                        onclick="del(`<%= FilePath + file.name %>`)"
+                    >
+                        Удалить
+                    </button>
+                </div>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+    <script>
+        function del(path) {
+            const data = {
+                path: path,
+            };
+            const url = "/delete";
+            fetch(url, {
+                method: "POST",
+                body: new URLSearchParams(data),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            });
+            location.reload();
+        }
+    </script>
+</div>
